@@ -2,6 +2,7 @@
 import os.path
 import time
 import urllib
+from tkinter import X
 
 import pandas as pd
 from google.auth.transport.requests import Request
@@ -16,7 +17,7 @@ from selenium.webdriver.common.keys import Keys
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
 SAMPLE_SPREADSHEET_ID = '1H6GUuOZ4jaSdwxj7AkKW5OPOetSTM2FCibxLs9dW01o'
-SAMPLE_RANGE_NAME = 'AUTOMESSAGE_LIST!A100:B152'
+SAMPLE_RANGE_NAME = 'AUTOMESSAGE_LIST!A200:B302'
 
 message = """ Bom dia, fulano! Meu nome é Roberta e eu sou Analista de Crédito da empresa Confiance, tudo bem contigo?
 O motivo do meu contato é a recente liberação da nova margem de +5% para cartão consignado, da qual você pode ser um dos beneficiários...
@@ -55,45 +56,38 @@ def main():
     except HttpError as err:
         print(err)
     finally:
-        # nav = webdriver.Chrome()
-        # nav.get("https://web.whatsapp.com/")
+        nav = webdriver.Chrome()
+        nav.get("https://web.whatsapp.com/")
 
-        # while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) <1:
-        #     time.sleep(1)
-        # time.sleep(1.5)
-
+        while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) <1:
+            time.sleep(1)
+        time.sleep(1.5)
         for linha in valores:
+            
             nome = linha[0].title().strip()
             texto = message
             telefone = linha[1].replace(" ", "")
-            if len(telefone) != 13:
-                print("Quantidade de numeros inválida no telefone abaixo:")
-            
-            texto = texto.replace("fulano", nome.capitalize().strip())
+            texto = texto.replace("fulano", nome)
             texto = urllib.parse.quote(texto)
-            print(nome, telefone)
 
-        #     link = f"https://web.whatsapp.com/send?phone={telefone}&text={texto}"
-        #     nav.get(link)
+            link = f"https://web.whatsapp.com/send?phone={telefone}&text={texto}"
+            nav.get(link)
 
-        #     while len(nav.find_elements(By.ID, 'side')) < 1:
-        #         time.sleep(1)
-        #     time.sleep(1.5)
+            while len(nav.find_elements(By.ID, 'side')) < 1:
+                time.sleep(1)
+            time.sleep(1.5)
 
-        #     if len(nav.find_elements(By.XPATH, '//*[@id="app"]/div/span[2]/div/span/div/div/div/div/div/div[1]' )) < 1:
-        #         nav.find_element(By.XPATH, '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span' ).click()
-        #         time.sleep(1.5)
-        #         successSend.append(f"Esse numero foi encontrado e enviou a mensagem: {telefone}")
-        #         print(f"Esse numero foi encontrado e enviou a mensagem: {telefone}")
-        #     else:
-        #         failSend.append(f"Esse numero NÃO foi encontrado e NÃO enviou a mensagem: {telefone}")
-        #         print(f"Esse numero NÃO foi encontrado e NÃO enviou a mensagem: {telefone}")
-        # else:
-        #     print(f"Foi enviado um total de {len(successSend)} mensagens, enquanto houve falha em {len(failSend)} ")
+            if len(nav.find_elements(By.XPATH, '//*[@id="app"]/div/span[2]/div/span/div/div/div/div/div/div[1]' )) < 1:
+                nav.find_element(By.XPATH, '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span' ).click()
+                time.sleep(1.5)
+                successSend.append(f"Esse numero foi encontrado e enviou a mensagem: {telefone}")
+                print(f"Esse numero foi encontrado e enviou a mensagem: {telefone}")
+            else:
+                failSend.append(f"Esse numero NÃO foi encontrado e NÃO enviou a mensagem: {telefone}")
+                print(f"Esse numero NÃO foi encontrado e NÃO enviou a mensagem: {telefone}")
+        else:
+            print(f"{len(successSend)} mensagens foram enviadas com sucesso, havendo falha em {len(failSend)} ")
 
                 
-
-
-
 if __name__ == '__main__':
     main()
