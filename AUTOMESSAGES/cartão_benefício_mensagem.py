@@ -1,4 +1,4 @@
-coef = 27.5
+coef = 25
 dot_list = 0
 
 
