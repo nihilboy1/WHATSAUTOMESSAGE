@@ -13,20 +13,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+from texts import message1, message2
+
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-
-SAMPLE_SPREADSHEET_ID = "1H6GUuOZ4jaSdwxj7AkKW5OPOetSTM2FCibxLs9dW01o"
-SAMPLE_RANGE_NAME = "LOAS_E_BPC!A2:B140"
-
-message = """ Bom dia, fulano! Meu nome é Samuel e eu sou Analista de Crédito da empresa Confiance, tudo bem contigo?
-O motivo do meu contato é a recente liberação da nova margem de +5% para cartão consignado, da qual você pode ser um dos beneficiários...
-Esse produto tem diversas vantagens sobre os demais cartões e, além disso, o valor já entra na sua conta em até 12 horas! Que tal saber os valores disponíveis para você?
-
-Escolha uma das opções abaixo:
-1 - Simular para descobrir os valores disponíveis
-2 - Mais informações
-3 - Não tenho interesse  
-"""
+SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
+SAMPLE_RANGE_NAME = "CLIENTES_MAILING_CETELEM!A202:C401"
 successSend = []
 failSend = []
 
@@ -62,23 +53,24 @@ def main():
         nav.get("https://web.whatsapp.com/")
 
         while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) < 1:
-            time.sleep(1)
-        time.sleep(1.5)
+            time.sleep(1.5)
+        time.sleep(2)
 
         for linha in valores:
-            nome = linha[0].split(" ")
+            nome = linha[0].title().strip().split(" ")
             nome = nome[0]
-            telefone = linha[1]
-            texto = message
+
+            telefone = linha[1].replace(" ", "").strip()
+
+            texto = message2
             texto = texto.replace("fulano", nome)
             texto = urllib.parse.quote(texto)
-
             link = f"https://web.whatsapp.com/send?phone={telefone}&text={texto}"
             nav.get(link)
 
             while len(nav.find_elements(By.ID, "side")) < 1:
-                time.sleep(1)
-            time.sleep(1.5)
+                time.sleep(1.5)
+            time.sleep(2)
 
             if (
                 len(
@@ -93,7 +85,7 @@ def main():
                     By.XPATH,
                     '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span',
                 ).click()
-                time.sleep(1.5)
+                time.sleep(2)
                 successSend.append(
                     f"Esse numero foi encontrado e enviou a mensagem: {telefone}"
                 )

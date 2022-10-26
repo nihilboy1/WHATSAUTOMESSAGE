@@ -12,8 +12,8 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-SAMPLE_SPREADSHEET_ID = "1H6GUuOZ4jaSdwxj7AkKW5OPOetSTM2FCibxLs9dW01o"
-SAMPLE_RANGE_NAME = "LOAS_E_BPC!A2:B140"
+SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
+SAMPLE_RANGE_NAME = "CLIENTES_MAILING_ITAU!A2:C201"
 
 
 def main():
@@ -43,29 +43,29 @@ def main():
         new_values = []
 
         for linha in valores:
-            nome = linha[0].title().strip().split(" ")
-            nome = nome[0]
+            nome = linha[0].title().strip()
             telefone = linha[1].replace(" ", "").strip()
+            if len(telefone) < 13:
+                telefone = f"{telefone[0:4]}9{telefone[4:]}"
 
-            # cpf = linha[2]
-            # while len(cpf) < 11:
-            #     cpf = "0" + cpf
-            # if not "." or "-" in cpf:
-            #     cpf = cpf.replace(".", "")
-            #     cpf = cpf.replace("-", "")
-            #     cpf = f"{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
-            new_values.append([nome, telefone])
+            cpf = linha[2]
+            if len(cpf) < 11:
+                cpf = "0" + cpf
+            cpf = cpf.replace(".", "")
+            cpf = cpf.replace("-", "")
+            cpf = f"{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+            new_values.append([nome, telefone, cpf])
 
-        # result = (
-        #     sheet.values()
-        #     .update(
-        #         spreadsheetId=SAMPLE_SPREADSHEET_ID,
-        #         range="LOAS_E_BPC_CARTÃO!A2",
-        #         valueInputOption="USER_ENTERED",
-        #         body={"values": new_values},
-        #     )
-        #     .execute()
-        # )
+        result = (
+            sheet.values()
+            .update(
+                spreadsheetId=SAMPLE_SPREADSHEET_ID,
+                range="CLIENTES_MAILING_ITAU!A2",
+                valueInputOption="USER_ENTERED",
+                body={"values": new_values},
+            )
+            .execute()
+        )
 
     except HttpError as err:
         print(err)
