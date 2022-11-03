@@ -13,7 +13,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
-SAMPLE_RANGE_NAME = "CLIENTES_MAILING_ITAU!A2:C201"
+SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A2:C621"
 
 
 def main():
@@ -44,23 +44,21 @@ def main():
 
         for linha in valores:
             nome = linha[0].title().strip()
-            telefone = linha[1].replace(" ", "").strip()
-            if len(telefone) < 13:
-                telefone = f"{telefone[0:4]}9{telefone[4:]}"
-
-            cpf = linha[2]
+            telefone = linha[1].replace(" ", "").replace("-", "").strip()
+            cpf = linha[2].strip().replace(" ", "")
             if len(cpf) < 11:
                 cpf = "0" + cpf
             cpf = cpf.replace(".", "")
             cpf = cpf.replace("-", "")
             cpf = f"{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
             new_values.append([nome, telefone, cpf])
+            print(nome, telefone, cpf)
 
         result = (
             sheet.values()
             .update(
                 spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                range="CLIENTES_MAILING_ITAU!A2",
+                range="CLIENTES_DO_EMAIL!A2",
                 valueInputOption="USER_ENTERED",
                 body={"values": new_values},
             )
