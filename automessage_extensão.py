@@ -3,7 +3,6 @@ import urllib
 from time import sleep
 
 import clipboard
-import pandas as pd
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -17,11 +16,11 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
-from texts import cartao_benef, saque_complementar
+from mensagens_disparo import cartao_benef, saque_complementar
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
-SAMPLE_RANGE_NAME = "FAKE_DATA!A1:D14"
+SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A732:D851"
 successSend = []
 failSend = []
 
@@ -76,7 +75,7 @@ def continueProcess(nav, telefone, texto):
         failSend.append(f"Erro: {telefone}")
         close_invalid_number_modal.click()
         return
-
+    sleep(1.5)
     conversation_text_box = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
@@ -90,6 +89,7 @@ def continueProcess(nav, telefone, texto):
     conversation_text_box.click()
     conversation_text_box.clear()
     conversation_text_box.send_keys(Keys.CONTROL, "v")
+    sleep(0.5)
     send_message_button = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
@@ -146,15 +146,13 @@ def main():
                 nome = linha[0].title().strip().split(" ")
                 nome = nome[0]
                 # valor_saque = linha[2]
-
                 telefone = linha[1].replace(" ", "").strip()
                 atendente = "Roberta"
                 texto = cartao_benef.strip()
-                texto = texto.replace("FULANO", nome)
+                texto = texto.replace("CLIENTE", nome)
                 texto = texto.replace("ATENDENTE", atendente)
                 # texto = texto.replace("VALOR_PROPOSTA", valor_saque)
-
-                print(texto)
+                print(nome, telefone)
                 continueProcess(nav, telefone, texto)
             else:
                 print(linha)

@@ -10,13 +10,14 @@ Esse produto tem diversas vantagens sobre os demais cartões e, além disso, o v
 Vamos realizar a simulação? :)
 """
 
-cartao_benef = """Olá, FULANO, meu nome é ATENDENTE, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+mensagem_cartão_benefício = """Olá, *CLIENTE*, meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
 
 Sabia que você tem *+5%* de margem para um *NOVO CARTÃO* cheio de *BENEFÍCIOS*?
 
-✅ Valor liberado na sua conta em até 24 Horas
-✅ Sem anuidade
-✅ Mais limite para compras!
+✅ ZERO de anuidade
+✅ Descontos em farmácias
+✅ Cartão aceito em todos os lugares!
+✅ Valor de saque liberado na sua conta em até 24 Horas
 
 Envie *1* para receber sua simulação! :)
 Envie *2* caso não tenha interesse no momento
@@ -25,7 +26,7 @@ Envie *2* caso não tenha interesse no momento
 """
 
 
-saque_complementar = """Boa tarde, FULANO! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+mensagem_saque_complementar = """Boa tarde, FULANO! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
 
 Sabia que o banco *OLÉ* tem uma proposta de saque complementar no valor de *VALOR_PROPOSTA* *pré-aprovada* para você?
 

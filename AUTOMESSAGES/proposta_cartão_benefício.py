@@ -33,13 +33,15 @@ O valor total de limite em seu cartão será de *R${valor_total}*, onde 70% dess
 O cartão de crédito será enviado para o seu endereço cadastrado, com limite de *R${valor_credito}*. O desconto no seu benefício será de apenas *R${margem}*, até que seja quitado o valor do saque efetuado de *R${valor_saque}*.
 
 *OBSERVAÇÕES:*
-Cartão sem anuidade
-Cartão chegará no endereço cadastrado em por volta de 20 dias
-O valor de saque fica disponível no prazo de 24 horas
+✅ ZERO de anuidade
+✅ Descontos em farmácias
+✅ Pagamento mínimo da fatura direto na folha
+✅ O valor de saque fica disponível no prazo de 24 horas
+✅ Cartão chegará no endereço cadastrado em cerca de 20 dias
 
-*É importante ressaltar que o cartão benefício não é como um empréstimo consignado comum, que tem data para iniciar e acabar. Como o cartão de crédito fica ativo pelo tempo que você desejar, o desconto de R${margem} também continua todos os meses. Contudo, você pode realizar a quitação ou amortização dessas parcelas a qualquer momento para diminuir o tempo de desconto!*
+*É importante ressaltar que o cartão benefício não é como um empréstimo consignado comum, que tem data para iniciar e acabar. Como o cartão de crédito fica ativo pelo tempo que você desejar, o desconto de R${margem} também continua todos os meses, até um prazo máximo de 90x. Contudo, você pode realizar a quitação ou amortização dessas parcelas a qualquer momento para encerrar o desconto!*
 ----------------------------------------------------------
-✅ CONFIANCE - MAIS CRÉDITO PARA VOCÊ!
+*CONFIANCE - MAIS CRÉDITO PARA VOCÊ!*
 ----------------------------------------------------------
 *Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
 

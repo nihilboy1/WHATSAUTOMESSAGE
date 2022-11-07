@@ -1,9 +1,6 @@
 import os.path
-import time
 import urllib
-from tkinter import X
 
-import pandas as pd
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -12,8 +9,8 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
-SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A2:C621"
+SAMPLE_SPREADSHEET_ID = "1ufDFUxWfo2QeispqkqI0Vjf4W01-Ef0oy2t9qIcNMlM"
+SAMPLE_RANGE_NAME = "Worksheet!A2:C2651"
 
 
 def main():
@@ -45,6 +42,7 @@ def main():
         for linha in valores:
             nome = linha[0].title().strip()
             telefone = linha[1].replace(" ", "").replace("-", "").strip()
+            telefone = f"55{telefone}"
             cpf = linha[2].strip().replace(" ", "")
             if len(cpf) < 11:
                 cpf = "0" + cpf
@@ -58,7 +56,7 @@ def main():
             sheet.values()
             .update(
                 spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                range="CLIENTES_DO_EMAIL!A2",
+                range="Worksheet!A2",
                 valueInputOption="USER_ENTERED",
                 body={"values": new_values},
             )
@@ -82,3 +80,38 @@ if __name__ == "__main__":
 
 """Retirar um 9 errado após o 55"""
 # telefone = f"{telefone[0:2]}" + f"{telefone[3:]}"
+
+
+"""
+            nome = linha[0].title().strip()
+            telefone = linha[1].replace(" ", "").replace("-", "").strip()
+            cpf = linha[2].strip().replace(" ", "")
+            if len(cpf) < 11:
+                cpf = "0" + cpf
+            cpf = cpf.replace(".", "")
+            cpf = cpf.replace("-", "")
+            cpf = f"{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+            new_values.append([nome, telefone, cpf])
+            print(nome, telefone, cpf)
+
+"""
+
+# LIMPAR TELEFONES
+"""
+phone = linha[0]
+            if phone != "*":
+                if len(phone) > 11:
+                    print(f"Maior que 11: {phone} ")
+                    phone = "*"
+                elif len(phone) < 11:
+                    print(f"Menor que 11: {phone} ")
+                    phone = "*"
+                elif phone[2] != "9":
+                    print(f"Sem o 9: {phone} ")
+                    phone = "*"
+                elif int(phone[3]) < 6:
+                    print(f"Fixo: {phone} ")
+                    phone = "*"
+            new_values.append([phone])
+
+"""
