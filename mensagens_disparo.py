@@ -38,3 +38,49 @@ Envie *1* para prosseguir com a proposta
 Envie *2* caso não tenha interesse no momento
 
 *Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
+
+margem_nova = """Boa tarde, *CLIENTE*! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+
+Sabia que a gente tem uma proposta de empréstimo *pré-aprovada* para você?
+
+✅ *Prazo de até 84x para pagar*
+✅ *Parcela que cabe no seu bolso*
+✅ *As menores taxas de juros!*
+✅ *Desconto fácil direto na folha!*
+
+Envie *1* para receber a simulação! :)
+Envie *2* caso não tenha interesse no momento
+
+*Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
+
+
+representante = """Boa tarde, *CLIENTE*! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+
+Sabia que a gente tem uma proposta de empréstimo *pré-aprovada* para você?
+
+Agora já é possível menor de idade ou tutelado obter empréstimo consignado por meio do seu responsável legal :)
+
+✅ *Prazo de até 84x para pagar*
+✅ *Parcela que cabe no seu bolso*
+✅ *As menores taxas de juros!*
+✅ *Desconto fácil direto na folha!*
+
+Envie *1* para receber a simulação! :)
+Envie *2* caso não tenha interesse no momento
+
+*Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
+
+
+fgts = """Boa tarde, *CLIENTE*! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+
+Sua antecipação de *saque aniversário FGTS* já está *pré-aprovada* com a gente!
+
+✅ *Sem desconto mensal*
+✅ *Na sua conta em menos de 30 minutos*
+✅ *Antecipação de até 10 Anos!*
+✅ *Antecipe mesmo estando negativado!*
+
+Envie *1* para receber a simulação! :)
+Envie *2* caso não tenha interesse no momento
+
+*Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""

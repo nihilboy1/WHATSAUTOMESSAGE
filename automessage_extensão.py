@@ -16,11 +16,12 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
-from mensagens_disparo import cartao_benef, saque_complementar
+from mensagens_disparo import mensagem_cartão_benefício,margem_nova, representante, fgts
+from variaveis import rangeName, spreadSheetId
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
-SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A732:D851"
+SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A2:D1255"
 successSend = []
 failSend = []
 
@@ -30,8 +31,6 @@ def start(nav):
     while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) < 1:
         sleep(1)
     sleep(1)
-
-
 def continueProcess(nav, telefone, texto):
     while len(nav.find_elements(By.ID, "side")) < 1:
         sleep(1)
@@ -102,7 +101,6 @@ def continueProcess(nav, telefone, texto):
     successSend.append(f"Ok: {telefone}")
     sleep(0.5)
 
-
 def main():
     creds = None
 
@@ -148,7 +146,7 @@ def main():
                 # valor_saque = linha[2]
                 telefone = linha[1].replace(" ", "").strip()
                 atendente = "Roberta"
-                texto = cartao_benef.strip()
+                texto = mensagem_cartão_benefício.strip()
                 texto = texto.replace("CLIENTE", nome)
                 texto = texto.replace("ATENDENTE", atendente)
                 # texto = texto.replace("VALOR_PROPOSTA", valor_saque)

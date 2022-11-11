@@ -9,8 +9,8 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-SAMPLE_SPREADSHEET_ID = "1ufDFUxWfo2QeispqkqI0Vjf4W01-Ef0oy2t9qIcNMlM"
-SAMPLE_RANGE_NAME = "Worksheet!A2:C2651"
+SAMPLE_SPREADSHEET_ID = "13WEZQo4Ocv-RtT8sPzTVxFPobBdpzfKO1B662M0HDjo"
+SAMPLE_RANGE_NAME = "C6CINTIA!A2:D975"
 
 
 def main():
@@ -44,10 +44,9 @@ def main():
             telefone = linha[1].replace(" ", "").replace("-", "").strip()
             telefone = f"55{telefone}"
             cpf = linha[2].strip().replace(" ", "")
+            cpf = cpf.replace(".", "").replace("-", "")
             if len(cpf) < 11:
                 cpf = "0" + cpf
-            cpf = cpf.replace(".", "")
-            cpf = cpf.replace("-", "")
             cpf = f"{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
             new_values.append([nome, telefone, cpf])
             print(nome, telefone, cpf)
@@ -56,7 +55,7 @@ def main():
             sheet.values()
             .update(
                 spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                range="Worksheet!A2",
+                range="C6CINTIA!A2",
                 valueInputOption="USER_ENTERED",
                 body={"values": new_values},
             )
