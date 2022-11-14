@@ -39,11 +39,13 @@ O cartão de crédito será enviado para o seu endereço cadastrado, com limite 
 ✅ Valor de saque disponível em até 24 horas
 ✅ Pagamento mínimo da fatura direto na folha
 
-*É importante ressaltar que o cartão benefício não é como um empréstimo consignado comum, que tem data para iniciar e acabar. Como o cartão de crédito fica ativo pelo tempo que você desejar, o desconto de R${margem} também continua todos os meses, até um prazo máximo de 84x. Contudo, você pode realizar a quitação ou amortização dessas parcelas a qualquer momento para encerrar o desconto!*
 ----------------------------------------------------------
 *CONFIANCE - MAIS CRÉDITO PARA VOCÊ!*
 ----------------------------------------------------------
-*Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
+*Nosso CNPJ para a sua segurança: 48.248.145/0001-32*
+
+*É importante ressaltar que o cartão benefício não é como um empréstimo consignado comum, que tem data para iniciar e acabar. Como o cartão de crédito fica ativo pelo tempo que você desejar, o desconto de R${margem} também continua todos os meses, até um prazo máximo de 84x. Contudo, você pode realizar a quitação ou amortização dessas parcelas a qualquer momento para encerrar o desconto!*
+"""
 
 
 print(proposta2)

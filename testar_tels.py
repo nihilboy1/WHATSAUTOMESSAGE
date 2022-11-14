@@ -1,8 +1,7 @@
 import os.path
-import urllib
+from datetime import timedelta
 from time import sleep
 
-import clipboard
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -11,19 +10,14 @@ from googleapiclient.errors import HttpError
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
-from mensagens_disparo import mensagem_cartão_benefício,margem_nova, representante, fgts
-from variaveis import rangeName, spreadSheetId
-
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 SAMPLE_SPREADSHEET_ID = "13WEZQo4Ocv-RtT8sPzTVxFPobBdpzfKO1B662M0HDjo"
-SAMPLE_RANGE_NAME = "C6CINTIA!A2:D60"
-successSend = []
-failSend = []
+SAMPLE_RANGE_NAME = "C6CINTIA!B209:B865"
+invalidNumbers = []
 
 
 def start(nav):
@@ -31,7 +25,9 @@ def start(nav):
     while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) < 1:
         sleep(1)
     sleep(1)
-def continueProcess(nav, telefone, texto):
+
+
+def continueProcess(nav, telefone):
     while len(nav.find_elements(By.ID, "side")) < 1:
         sleep(1)
     sleep(1)
@@ -52,7 +48,7 @@ def continueProcess(nav, telefone, texto):
         ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[2]/a[2]"))
     )
     open_chat_button.click()
-    sleep(1.5)
+    sleep(1)
 
     while not (
         len(
@@ -64,42 +60,29 @@ def continueProcess(nav, telefone, texto):
         < 1
     ):
         close_invalid_number_modal = wdw(nav, 10).until(
-            ec.presence_of_element_located(
+            ec.element_to_be_clickable(
                 (
                     By.XPATH,
                     "/html/body/div[1]/div/span[2]/div/span/div/div/div/div/div/div[2]/div/div",
                 )
             )
         )
-        failSend.append(f"Erro: {telefone}")
+        invalidNumbers.append(f"Erro: {telefone}")
+        telefone = "Invalid"
         close_invalid_number_modal.click()
-        return
-    sleep(1.5)
-    conversation_text_box = wdw(nav, 10).until(
+        return telefone
+
+    header = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
                 By.XPATH,
-                "/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]/p",
+                "/html/body/div[1]/div/div/div[4]/div/header",
             )
         )
     )
-    clipboard.copy(texto)
-    conversation_text_box.clear()
-    conversation_text_box.click()
-    conversation_text_box.clear()
-    conversation_text_box.send_keys(Keys.CONTROL, "v")
-    sleep(0.5)
-    send_message_button = wdw(nav, 10).until(
-        ec.element_to_be_clickable(
-            (
-                By.XPATH,
-                "/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span",
-            )
-        )
-    )
-    send_message_button.click()
-    successSend.append(f"Ok: {telefone}")
-    sleep(0.5)
+    sleep(1)
+    return telefone
+
 
 def main():
     creds = None
@@ -138,27 +121,32 @@ def main():
             service=Service(ChromeDriverManager().install()), options=options
         )
         start(nav)
+        new_values = []
+        count = len(valores)
+        secondsToFinish = round(count * 3.4)
+        print("Tempo para conclusão: ", timedelta(seconds=secondsToFinish))
 
         for linha in valores:
-            if linha[3] == "*":
-                nome = linha[0].title().strip().split(" ")
-                nome = nome[0]
-                # valor_saque = linha[2]
-                telefone = linha[1].replace(" ", "").strip()
-                atendente = "Roberta"
-                texto = mensagem_cartão_benefício.strip()
-                texto = texto.replace("CLIENTE", nome)
-                texto = texto.replace("ATENDENTE", atendente)
-                # texto = texto.replace("VALOR_PROPOSTA", valor_saque)
-                print(nome, telefone)
-                continueProcess(nav, telefone, texto)
-            else:
-                print(linha)
-        else:
+            telefone = linha[0].replace(" ", "").strip()
+            telefone = continueProcess(nav, telefone)
             print(
-                f"{len(successSend)} mensagens foram enviadas com sucesso, havendo falha em {len(failSend)} "
+                f"Restam {count} telefones | Numero atual: {telefone}"
             )
-            for i in failSend:
+            new_values.append([telefone])
+            count -= 1
+        else:
+            result = (
+                sheet.values()
+                .update(
+                    spreadsheetId=SAMPLE_SPREADSHEET_ID,
+                    range=SAMPLE_RANGE_NAME,
+                    valueInputOption="USER_ENTERED",
+                    body={"values": new_values},
+                )
+                .execute()
+            )
+            print(f"{len(invalidNumbers)} numeros inválidos!")
+            for i in invalidNumbers:
                 print(i)
 
 
