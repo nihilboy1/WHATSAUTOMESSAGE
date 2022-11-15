@@ -21,7 +21,7 @@ from variaveis import rangeName, spreadSheetId
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "13WEZQo4Ocv-RtT8sPzTVxFPobBdpzfKO1B662M0HDjo"
-SAMPLE_RANGE_NAME = "C6CINTIA!A2:D60"
+SAMPLE_RANGE_NAME = "C6CINTIA!A161:D260"
 successSend = []
 failSend = []
 

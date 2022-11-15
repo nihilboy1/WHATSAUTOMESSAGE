@@ -1,5 +1,5 @@
 import os.path
-import urllib
+import re
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -9,8 +9,13 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-SAMPLE_SPREADSHEET_ID = "13WEZQo4Ocv-RtT8sPzTVxFPobBdpzfKO1B662M0HDjo"
-SAMPLE_RANGE_NAME = "C6CINTIA!A2:D975"
+SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
+SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A2156:D2241"
+
+
+def getNumbers(str):
+    array = re.findall(r"[0-9]+", str)
+    return array
 
 
 def main():
@@ -41,21 +46,21 @@ def main():
 
         for linha in valores:
             nome = linha[0].title().strip()
-            telefone = linha[1].replace(" ", "").replace("-", "").strip()
-            telefone = f"55{telefone}"
+            telefone = getNumbers(linha[1])
+            telefone = "".join(telefone)
+            #telefone = f"55{telefone}"
             cpf = linha[2].strip().replace(" ", "")
             cpf = cpf.replace(".", "").replace("-", "")
             if len(cpf) < 11:
                 cpf = "0" + cpf
             cpf = f"{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
             new_values.append([nome, telefone, cpf])
-            print(nome, telefone, cpf)
 
         result = (
             sheet.values()
             .update(
                 spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                range="C6CINTIA!A2",
+                range="CLIENTES_DO_EMAIL!A2156",
                 valueInputOption="USER_ENTERED",
                 body={"values": new_values},
             )
