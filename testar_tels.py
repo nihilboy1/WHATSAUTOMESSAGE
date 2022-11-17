@@ -1,6 +1,7 @@
 import os.path
 from datetime import timedelta
 from time import sleep
+from playsound import playsound 
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -15,8 +16,8 @@ from selenium.webdriver.support.ui import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-SAMPLE_SPREADSHEET_ID = "13WEZQo4Ocv-RtT8sPzTVxFPobBdpzfKO1B662M0HDjo"
-SAMPLE_RANGE_NAME = "C6CINTIA!B209:B865"
+SAMPLE_SPREADSHEET_ID = "18YcWIfYXwLgQGr0Lsx5IcZYz_ab3ch-5d3uvsaNSoi0"
+SAMPLE_RANGE_NAME = "BASE!B999:B1150"
 invalidNumbers = []
 
 
@@ -25,8 +26,6 @@ def start(nav):
     while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) < 1:
         sleep(1)
     sleep(1)
-
-
 def continueProcess(nav, telefone):
     while len(nav.find_elements(By.ID, "side")) < 1:
         sleep(1)
@@ -37,6 +36,7 @@ def continueProcess(nav, telefone):
             (By.XPATH, '//*[@id="startNonContactChat"]/div/span')
         )
     )
+    
     start_new_conversation_button.click()
 
     input_number_area = wdw(nav, 10).until(
@@ -44,6 +44,7 @@ def continueProcess(nav, telefone):
     )
     input_number_area.clear()
     input_number_area.send_keys(telefone)
+    sleep(0.4)
     open_chat_button = wdw(nav, 10).until(
         ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[2]/a[2]"))
     )
@@ -69,6 +70,7 @@ def continueProcess(nav, telefone):
         )
         invalidNumbers.append(f"Erro: {telefone}")
         telefone = "Invalid"
+        sleep(0.6)
         close_invalid_number_modal.click()
         return telefone
 
@@ -83,8 +85,8 @@ def continueProcess(nav, telefone):
     sleep(1)
     return telefone
 
-
 def main():
+    
     creds = None
 
     if os.path.exists("token.json"):
@@ -111,44 +113,43 @@ def main():
     except HttpError as err:
         print(err)
     finally:
-
-        options = webdriver.ChromeOptions()
-        options.add_argument(
-            r"--user-data-dir=C:/Users/samue/AppData/Local/Google/Chrome/User Data"
-        )
-        options.add_argument(r"--profile-directory=Profile 4")
-        nav = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=options
-        )
-        start(nav)
-        new_values = []
-        count = len(valores)
-        secondsToFinish = round(count * 3.4)
-        print("Tempo para conclusão: ", timedelta(seconds=secondsToFinish))
-
-        for linha in valores:
-            telefone = linha[0].replace(" ", "").strip()
-            telefone = continueProcess(nav, telefone)
-            print(
-                f"Restam {count} telefones | Numero atual: {telefone}"
+        try:
+            options = webdriver.ChromeOptions()
+            options.add_argument(
+                r"--user-data-dir=C:/Users/samue/AppData/Local/Google/Chrome/User Data"
             )
-            new_values.append([telefone])
-            count -= 1
-        else:
-            result = (
-                sheet.values()
-                .update(
-                    spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                    range=SAMPLE_RANGE_NAME,
-                    valueInputOption="USER_ENTERED",
-                    body={"values": new_values},
+            options.add_argument(r"--profile-directory=Profile 4")
+            nav = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()), options=options
+            )
+            start(nav)
+            new_values = []
+            count = len(valores)
+            secondsToFinish = round(count * 3.65)
+            print("Tempo para conclusão: ", timedelta(seconds=secondsToFinish))
+
+            for linha in valores:
+                telefone = linha[0].replace(" ", "").strip()
+                telefone = continueProcess(nav, telefone)
+                print(
+                    f"Restam {count} | Ultimo telefone testado: {telefone}"
                 )
-                .execute()
-            )
-            print(f"{len(invalidNumbers)} numeros inválidos!")
-            for i in invalidNumbers:
-                print(i)
-
-
+                new_values.append([telefone])
+                count -= 1
+            else:
+                result = (
+                    sheet.values()
+                    .update(
+                        spreadsheetId=SAMPLE_SPREADSHEET_ID,
+                        range=SAMPLE_RANGE_NAME,
+                        valueInputOption="USER_ENTERED",
+                        body={"values": new_values},
+                    )
+                    .execute()
+                )
+                print(f"{len(invalidNumbers)} numeros inválidos!")
+                playsound("D:/Github/WHATSAUTOMESSAGE/bip.mp3")
+        except:
+            playsound("D:/Github/WHATSAUTOMESSAGE/error.mp3")
 if __name__ == "__main__":
     main()

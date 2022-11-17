@@ -9,10 +9,10 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
-SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A2156:D2241"
+SAMPLE_SPREADSHEET_ID = "18YcWIfYXwLgQGr0Lsx5IcZYz_ab3ch-5d3uvsaNSoi0"
+SAMPLE_RANGE_NAME = "BASE!A2:C3502"
 
-
+ 
 def getNumbers(str):
     array = re.findall(r"[0-9]+", str)
     return array
@@ -48,19 +48,20 @@ def main():
             nome = linha[0].title().strip()
             telefone = getNumbers(linha[1])
             telefone = "".join(telefone)
-            #telefone = f"55{telefone}"
-            cpf = linha[2].strip().replace(" ", "")
-            cpf = cpf.replace(".", "").replace("-", "")
+            telefone = f"55{telefone}"
+            cpf = getNumbers(linha[2])
+            cpf = "".join(cpf)
             if len(cpf) < 11:
                 cpf = "0" + cpf
             cpf = f"{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
             new_values.append([nome, telefone, cpf])
+            print(nome, telefone, cpf)
 
         result = (
             sheet.values()
             .update(
                 spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                range="CLIENTES_DO_EMAIL!A2156",
+                range=SAMPLE_RANGE_NAME,
                 valueInputOption="USER_ENTERED",
                 body={"values": new_values},
             )
@@ -116,6 +117,19 @@ phone = linha[0]
                 elif int(phone[3]) < 6:
                     print(f"Fixo: {phone} ")
                     phone = "*"
+
+
+            
+            if len(telefone) < 11:
+                telefone = f"{telefone[0:2]}9{telefone[2:]}"
+
+            if len(telefone) > 10:
+                if telefone[2] != "9":
+                    telefone = "-"
+
+            if len(telefone) < 10:
+                   telefone = f"-"
+            
             new_values.append([phone])
 
 """

@@ -12,7 +12,7 @@ Vamos realizar a simulação? :)
 
 mensagem_cartão_benefício = """Olá, *CLIENTE*, meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
 
-Sabia que você tem *+5%* de margem para um *NOVO CARTÃO* cheio de *BENEFÍCIOS*?
+Sabia que você tem *+5%* de margem para um *NOVO CARTÃO* para usar nessa *BLACK FRIDAY*?
 
 ✅ ZERO de anuidade
 ✅ Descontos em farmácias
@@ -84,3 +84,19 @@ Envie *1* para receber a simulação! :)
 Envie *2* caso não tenha interesse no momento
 
 *Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
+
+
+generico = """Olá, *CLIENTE*, meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+
+Deseja consultar a sua *MARGEM CONSIGNÁVEL* para descobrir as propostas disponíveis para você no momento?
+
+Envie *1* para realizarmos a análise :)
+Envie *2* caso não tenha interesse no momento
+
+✅ *Dinheiro na conta em menos de 24 horas*
+✅ *Parcelas que cabem no seu bolso*
+✅ *As menores taxas de juros!*
+✅ *Atendimento especializado*
+
+---------------------------------------
+*Nosso CNPJ: 48.248.145/0001-32*"""
