@@ -88,15 +88,21 @@ Envie *2* caso não tenha interesse no momento
 
 generico = """Olá, *CLIENTE*, meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
 
-Deseja consultar a sua *MARGEM CONSIGNÁVEL* para descobrir as propostas disponíveis para você no momento?
+Deseja realizar uma *ANÁLISE DE MARGEM* para localizar as propostas disponíveis para você no momento?
 
-Envie *1* para realizarmos a análise :)
+Envie *1* para realizar a análise :)
 Envie *2* caso não tenha interesse no momento
 
 ✅ *Dinheiro na conta em menos de 24 horas*
-✅ *Parcelas que cabem no seu bolso*
-✅ *As menores taxas de juros!*
+✅ *Contratação 100% digital*
 ✅ *Atendimento especializado*
+✅ *Segurança e agilidade*
 
 ---------------------------------------
 *Nosso CNPJ: 48.248.145/0001-32*"""
+
+generico1 = """Bom dia, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista de crédito da *Confiance*.
+
+Vamos consultar sua margem consignavel e de cartão para descobrir as propostas disponiveis para você no momento?
+
+Envie "Sim" para receber sua simulação sem compromisso 😃."""

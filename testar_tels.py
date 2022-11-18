@@ -1,13 +1,13 @@
 import os.path
 from datetime import timedelta
 from time import sleep
-from playsound import playsound 
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from playsound import playsound
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -17,7 +17,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 SAMPLE_SPREADSHEET_ID = "18YcWIfYXwLgQGr0Lsx5IcZYz_ab3ch-5d3uvsaNSoi0"
-SAMPLE_RANGE_NAME = "BASE!B999:B1150"
+SAMPLE_RANGE_NAME = "BASE!B3381:B3455"
 invalidNumbers = []
 
 
@@ -26,6 +26,8 @@ def start(nav):
     while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) < 1:
         sleep(1)
     sleep(1)
+
+
 def continueProcess(nav, telefone):
     while len(nav.find_elements(By.ID, "side")) < 1:
         sleep(1)
@@ -36,20 +38,20 @@ def continueProcess(nav, telefone):
             (By.XPATH, '//*[@id="startNonContactChat"]/div/span')
         )
     )
-    
+
     start_new_conversation_button.click()
 
     input_number_area = wdw(nav, 10).until(
         ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[1]/div/input"))
     )
     input_number_area.clear()
+    sleep(0.3)
     input_number_area.send_keys(telefone)
-    sleep(0.4)
     open_chat_button = wdw(nav, 10).until(
         ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[2]/a[2]"))
     )
     open_chat_button.click()
-    sleep(1)
+    sleep(1.2)
 
     while not (
         len(
@@ -70,7 +72,7 @@ def continueProcess(nav, telefone):
         )
         invalidNumbers.append(f"Erro: {telefone}")
         telefone = "Invalid"
-        sleep(0.6)
+        sleep(1)
         close_invalid_number_modal.click()
         return telefone
 
@@ -85,8 +87,9 @@ def continueProcess(nav, telefone):
     sleep(1)
     return telefone
 
+
 def main():
-    
+
     creds = None
 
     if os.path.exists("token.json"):
@@ -125,15 +128,14 @@ def main():
             start(nav)
             new_values = []
             count = len(valores)
+            absoluteCount = len(valores)
             secondsToFinish = round(count * 3.65)
             print("Tempo para conclusão: ", timedelta(seconds=secondsToFinish))
 
             for linha in valores:
                 telefone = linha[0].replace(" ", "").strip()
                 telefone = continueProcess(nav, telefone)
-                print(
-                    f"Restam {count} | Ultimo telefone testado: {telefone}"
-                )
+                print(f"Restam {count} | Ultimo teste: {telefone}")
                 new_values.append([telefone])
                 count -= 1
             else:
@@ -147,9 +149,17 @@ def main():
                     )
                     .execute()
                 )
-                print(f"{len(invalidNumbers)} numeros inválidos!")
-                playsound("D:/Github/WHATSAUTOMESSAGE/bip.mp3")
+                failPerc = (len(invalidNumbers) / absoluteCount) * 100
+                success = absoluteCount - len(invalidNumbers)
+                fails = len(invalidNumbers)
+                print(
+                    f"{fails} Numeros inválidos! | {success} Numeros corretos | {failPerc:.2f}% de falha"
+                )
+                playsound("D:\Github\WHATSAUTOMESSAGE\end.mp3")
         except:
-            playsound("D:/Github/WHATSAUTOMESSAGE/error.mp3")
+            print("Houve um erro...")
+            playsound("D:\Github\WHATSAUTOMESSAGE\end.mp3")
+
+
 if __name__ == "__main__":
     main()

@@ -17,11 +17,10 @@ from selenium.webdriver.support.ui import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
 from mensagens_disparo import mensagem_cartão_benefício,margem_nova, representante, fgts, generico
-from variaveis import rangeName, spreadSheetId
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
-SAMPLE_RANGE_NAME = "BASE!A2:C3502"
+SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A1638:D1706"
 successSend = []
 failSend = []
 
@@ -144,13 +143,11 @@ def main():
             if linha[3] == "*":
                 nome = linha[0].title().strip().split(" ")
                 nome = nome[0]
-                # valor_saque = linha[2]
                 telefone = linha[1].replace(" ", "").strip()
                 atendente = "Roberta"
                 texto = generico.strip()
                 texto = texto.replace("CLIENTE", nome)
                 texto = texto.replace("ATENDENTE", atendente)
-                # texto = texto.replace("VALOR_PROPOSTA", valor_saque)
                 print(texto)
                 continueProcess(nav, telefone, texto)
             else:
