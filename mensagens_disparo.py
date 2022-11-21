@@ -103,6 +103,8 @@ Envie *2* caso não tenha interesse no momento
 
 generico1 = """Bom dia, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista de crédito da *Confiance*.
 
-Vamos consultar sua margem consignavel e de cartão para descobrir as propostas disponiveis para você no momento?
+Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
 
-Envie "Sim" para receber sua simulação sem compromisso 😃."""
+Envie "Sim" pra a gente realizar a sua simulação sem compromisso 😃.
+
+Qualquer dúvida, estou a disposição 😉."""
