@@ -20,7 +20,7 @@ from mensagens_disparo import mensagem_cartão_benefício,margem_nova, represent
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "18YcWIfYXwLgQGr0Lsx5IcZYz_ab3ch-5d3uvsaNSoi0"
-SAMPLE_RANGE_NAME = "BASE!A201:D250"
+SAMPLE_RANGE_NAME = "BASE!A693:D800"
 successSend = []
 failSend = []
 
@@ -144,7 +144,7 @@ def main():
                 nome = linha[0].title().strip().split(" ")
                 nome = nome[0]
                 telefone = linha[1].replace(" ", "").strip()
-                atendente = "Samuel"
+                atendente = "Roberta"
                 texto = generico1.strip()
                 texto = texto.replace("CLIENTE", nome)
                 texto = texto.replace("ATENDENTE", atendente)
