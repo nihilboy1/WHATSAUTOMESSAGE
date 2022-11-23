@@ -19,8 +19,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from mensagens_disparo import mensagem_cartão_benefício,margem_nova, representante, fgts, generico1
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-SAMPLE_SPREADSHEET_ID = "18YcWIfYXwLgQGr0Lsx5IcZYz_ab3ch-5d3uvsaNSoi0"
-SAMPLE_RANGE_NAME = "BASE!A693:D800"
+SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
+SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A201:D301"
 successSend = []
 failSend = []
 

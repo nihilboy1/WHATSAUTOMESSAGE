@@ -101,7 +101,7 @@ Envie *2* caso não tenha interesse no momento
 ---------------------------------------
 *Nosso CNPJ: 48.248.145/0001-32*"""
 
-generico1 = """Bom dia, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista de crédito da *Confiance*.
+generico1 = """Boa tarde, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista de crédito da *Confiance*.
 
 Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
 

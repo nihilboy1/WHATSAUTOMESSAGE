@@ -9,8 +9,8 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-SAMPLE_SPREADSHEET_ID = "18YcWIfYXwLgQGr0Lsx5IcZYz_ab3ch-5d3uvsaNSoi0"
-SAMPLE_RANGE_NAME = "BASE!A2:C3502"
+SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
+SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A2:C1722"
 
  
 def getNumbers(str):
@@ -48,7 +48,6 @@ def main():
             nome = linha[0].title().strip()
             telefone = getNumbers(linha[1])
             telefone = "".join(telefone)
-            telefone = f"55{telefone}"
             cpf = getNumbers(linha[2])
             cpf = "".join(cpf)
             if len(cpf) < 11:
