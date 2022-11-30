@@ -9,6 +9,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait as wdw
@@ -21,75 +22,71 @@ invalidNumbers = []
 
 
 def start(nav):
-    nav.get("https://web.whatsapp.com/")
-    while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) < 1:
-        sleep(1)
+    nav.get("https://autorizador.cetelem.com.br/Login")
     sleep(1)
 
-def continueProcess(nav, telefone):
-    while len(nav.find_elements(By.ID, "side")) < 1:
-        sleep(1)
-    sleep(1)
-
-    start_new_conversation_button = wdw(nav, 10).until(
+    token_validate = wdw(nav, 10).until(
         ec.element_to_be_clickable(
-            (By.XPATH, '//*[@id="startNonContactChat"]/div/span')
+            (By.XPATH, "/html/body/div[1]/div[1]/form/div[3]/table[2]/tbody/tr/td[8]/a")
         )
     )
-
-    start_new_conversation_button.click()
-
-    input_number_area = wdw(nav, 10).until(
-        ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[1]/div/input"))
+    token_validate.click()
+    enter_button = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (By.XPATH, "/html/body/form/div[3]/table[2]/tbody/tr/td[16]/a")
+        )
     )
-    input_number_area.clear()
+    enter_button.click()
+    sleep(1.5)
+    Alert(nav).accept()
+
+    cadastro_button = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (By.XPATH, '//*[@id="navbar-collapse-funcao"]/ul/li[1]/a')
+        )
+    )
+    cadastro_button.click()
     sleep(0.3)
-    input_number_area.send_keys(telefone)
-    open_chat_button = wdw(nav, 10).until(
-        ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[2]/a[2]"))
+    cadastro_button.click()
+    refin_cp_button = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (By.XPATH, "/html/body/div[3]/nav/div/ul/li[1]/ul/li[2]/a")
+        )
     )
-    open_chat_button.click()
-    sleep(1.2)
-
-    while not (
-        len(
-            nav.find_elements(
-                By.XPATH,
-                "/html/body/div[1]/div/span[2]/div/span/div/div/div/div/div/div[2]/div/div",
-            )
-        )
-        < 1
-    ):
-        close_invalid_number_modal = wdw(nav, 10).until(
-            ec.element_to_be_clickable(
-                (
-                    By.XPATH,
-                    "/html/body/div[1]/div/span[2]/div/span/div/div/div/div/div/div[2]/div/div",
-                )
-            )
-        )
-        invalidNumbers.append(f"Erro: {telefone}")
-        telefone = "Invalid"
-        sleep(1)
-        close_invalid_number_modal.click()
-        return telefone
-
-    header = wdw(nav, 10).until(
+    refin_cp_button.click()
+    products_button = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
                 By.XPATH,
-                "/html/body/div[1]/div/div/div[4]/div/header",
+                "/html/body/form/div[3]/table/tbody/tr/td/div[1]/table/tbody/tr[2]/td/div/table/tbody/tr[3]/td/table/tbody/tr/td[2]/select",
             )
         )
     )
-    sleep(1)
-    return telefone
+    products_button.click()
+    object_refin = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                "/html/body/form/div[3]/table/tbody/tr/td/div[1]/table/tbody/tr[2]/td/div/table/tbody/tr[3]/td/table/tbody/tr/td[2]/select/option[4]",
+            )
+        )
+    )
+    object_refin.click()
+    sleep(0.3)
+    continuar = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                "/html/body/form/div[3]/table/tbody/tr/td/div[1]/table/tbody/tr[2]/td/div/table/tbody/tr[5]/td/table/tbody/tr/td[1]/span/div[1]/div[2]/div[2]/table/tbody/tr/td/a",
+            )
+        )
+    )
+    continuar.click()
+    sleep(10)
 
 
 def main():
-
     creds = None
-
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
     if not creds or not creds.valid:
@@ -100,10 +97,8 @@ def main():
             creds = flow.run_local_server(port=0)
         with open("token.json", "w") as token:
             token.write(creds.to_json())
-
     try:
         service = build("sheets", "v4", credentials=creds)
-
         sheet = service.spreadsheets()
         result = (
             sheet.values()
@@ -131,22 +126,18 @@ def main():
             print("Tempo para conclusão: ", timedelta(seconds=secondsToFinish))
 
             for linha in valores:
-                telefone = linha[0].replace(" ", "").strip()
-                telefone = continueProcess(nav, telefone)
-                print(f"Restam {count} | Ultimo teste: {telefone}")
-                new_values.append([telefone])
                 count -= 1
             else:
-                result = (
-                    sheet.values()
-                    .update(
-                        spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                        range=SAMPLE_RANGE_NAME,
-                        valueInputOption="USER_ENTERED",
-                        body={"values": new_values},
-                    )
-                    .execute()
-                )
+                # result = (
+                #     sheet.values()
+                #     .update(
+                #         spreadsheetId=SAMPLE_SPREADSHEET_ID,
+                #         range=SAMPLE_RANGE_NAME,
+                #         valueInputOption="USER_ENTERED",
+                #         body={"values": new_values},
+                #     )
+                #     .execute()
+                # )
                 failPerc = (len(invalidNumbers) / absoluteCount) * 100
                 success = absoluteCount - len(invalidNumbers)
                 fails = len(invalidNumbers)

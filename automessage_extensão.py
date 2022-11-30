@@ -20,7 +20,7 @@ from mensagens_disparo import mensagem_cartão_benefício,margem_nova, represent
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
-SAMPLE_RANGE_NAME = "CLIENTES_DO_EMAIL!A201:D301"
+SAMPLE_RANGE_NAME = "BASE!A67:D100"
 successSend = []
 failSend = []
 
@@ -133,7 +133,7 @@ def main():
         options.add_argument(
             r"--user-data-dir=C:/Users/samue/AppData/Local/Google/Chrome/User Data"
         )
-        options.add_argument(r"--profile-directory=Profile 4")
+        options.add_argument(r"--profile-directory=Profile 1")
         nav = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()), options=options
         )
@@ -148,7 +148,7 @@ def main():
                 texto = generico1.strip()
                 texto = texto.replace("CLIENTE", nome)
                 texto = texto.replace("ATENDENTE", atendente)
-                print(texto)
+                print(nome, telefone)
                 continueProcess(nav, telefone, texto)
             else:
                 print(linha)
