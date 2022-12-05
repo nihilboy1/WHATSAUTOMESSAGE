@@ -1,3 +1,38 @@
+generico1 = """Olá, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista da *Confiance*.
+
+Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
+
+*Envie "1" pra a gente realizar a sua simulação rapidinho e sem compromisso 😃.*
+Envie "2" caso não tenha interesse no momento 😶
+
+Estou a disposição para tirar qualquer dúvida 😉."""
+
+
+generico2 = """Olá, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista de crédito da *Confiance*.
+
+Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
+
+*Envie "1" para realizarmos sua simulação rapidinho e sem compromisso 😃.*
+Envie "2" caso não tenha interesse no momento 😶
+
+Qualquer dúvida, estou a disposição 😉."""
+
+
+generico3 = """Olá, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou correspondente bancário da *Confiance*.
+
+Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
+
+*Envie "1" pra a gente realizar a sua simulação sem compromisso 😃.*
+Envie "2" caso não tenha interesse no momento 😶
+
+Se tiver qualquer dúvida, pode falar comigo 😉."""
+
+
+"""
+-----------------------------------------------------------------------
+
+"""
+
 message1 = """ Bom dia, fulano! Meu nome é Roberta e eu sou Analista de Crédito da Confiance, tudo bem contigo? Estou entrando em contato pra te oferecer uma proposta que pode liberar um valor na conta sua conta até o final do dia! 
 Escolha uma das opções abaixo:
 1 - Simular para descobrir os valores disponíveis
@@ -84,27 +119,3 @@ Envie *1* para receber a simulação! :)
 Envie *2* caso não tenha interesse no momento
 
 *Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
-
-
-generico = """Olá, *CLIENTE*, meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
-
-Deseja realizar uma *ANÁLISE DE MARGEM* para localizar as propostas disponíveis para você no momento?
-
-Envie *1* para realizar a análise :)
-Envie *2* caso não tenha interesse no momento
-
-✅ *Dinheiro na conta em menos de 24 horas*
-✅ *Contratação 100% digital*
-✅ *Atendimento especializado*
-✅ *Segurança e agilidade*
-
----------------------------------------
-*Nosso CNPJ: 48.248.145/0001-32*"""
-
-generico1 = """Bom dia, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista de crédito da *Confiance*.
-
-Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
-
-Envie "Sim" pra a gente realizar a sua simulação sem compromisso 😃.
-
-Qualquer dúvida, estou a disposição 😉."""

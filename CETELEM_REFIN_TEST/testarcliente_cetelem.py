@@ -1,7 +1,9 @@
 import os.path
+import re
 from datetime import timedelta
 from time import sleep
 
+import clipboard
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -9,16 +11,23 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-SAMPLE_SPREADSHEET_ID = "1x3dWpvyQ2A2Cpf2QLcSj_yU1dgxCzEvbToh4R0WpFK0"
-SAMPLE_RANGE_NAME = "contacts!B2:B57"
+SAMPLE_SPREADSHEET_ID = "1u5MlHBMgNRyF7HXFC4tHmuh90KrByK1y1hMlRk3jYWA"
+SAMPLE_RANGE_NAME = "cetelem_new!A6:C9"
 invalidNumbers = []
+
+
+def getNumbers(str):
+    array = re.findall(r"[0-9]+", str)
+    return array
 
 
 def start(nav):
@@ -38,16 +47,25 @@ def start(nav):
     )
     enter_button.click()
     sleep(1.5)
-    Alert(nav).accept()
+    try:
+        wdw(nav, 3).until(
+            ec.alert_is_present(),
+            "Timed out waiting for PA creation " + "confirmation popup to appear.",
+        )
 
+        alert = nav.switch_to.alert
+        alert.accept()
+        print("alert accepted")
+    except Exception:
+        print("no alert")
     cadastro_button = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (By.XPATH, '//*[@id="navbar-collapse-funcao"]/ul/li[1]/a')
         )
     )
-    cadastro_button.click()
+    actions = ActionChains(nav)
+    actions.move_to_element(cadastro_button).perform()
     sleep(0.3)
-    cadastro_button.click()
     refin_cp_button = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (By.XPATH, "/html/body/div[3]/nav/div/ul/li[1]/ul/li[2]/a")
@@ -63,6 +81,7 @@ def start(nav):
         )
     )
     products_button.click()
+    sleep(1)
     object_refin = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
@@ -82,7 +101,86 @@ def start(nav):
         )
     )
     continuar.click()
-    sleep(10)
+    sleep(1)
+
+
+def process(nav, cpf):
+    nav.refresh()
+    clipboard.copy("171795")
+    operador = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                '//*[@id="ctl00_Cph_UcR_jn_jOC_UcOrg_txtOrg3O_CAMPO"]',
+            )
+        )
+    )
+    operador.send_keys(Keys.CONTROL, "v")
+    area = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                '//*[@id="ctl00_Cph_Upd"]',
+            )
+        )
+    )
+    area.click()
+    sleep(2)
+    cpf_cliente = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                '//*[@id="ctl00_Cph_UcR_jn_jCl_UcCl_txtCpf_CAMPO"]',
+            )
+        )
+    )
+    clipboard.copy(cpf)
+    sleep(2)
+    cpf_cliente.send_keys(Keys.CONTROL, "v")
+    sleep(1)
+    area = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                '//*[@id="ctl00_Cph_Upd"]',
+            )
+        )
+    )
+    area.click()
+    try:
+        sleep(1)
+        listar_contratos = wdw(nav, 3).until(
+            ec.element_to_be_clickable((By.XPATH('//*[@id="btnLstCtt_txt"]'),))
+        )
+        return
+    except Exception:
+        sleep(1.5)
+        actions = ActionChains(nav)
+        actions.send_keys(Keys.RETURN)
+        actions.perform()
+        sleep(2)
+        nascimento = (
+            wdw(nav, 5).until(
+                ec.element_to_be_clickable(
+                    (By.XPATH('//*[@id="ctl00_Cph_UcR_jn_jCl_UcCl_txtDtNasc_CAMPO"]'),)
+                )
+            )
+        ).get_attribute("value")
+        print(nascimento)
+        benef = (
+            wdw(nav, 5).until(
+                ec.element_to_be_clickable(
+                    (By.XPATH('//*[@id="ctl00_Cph_UcR_jn_jCl_UcCl_txtCodBnf_CAMPO"]'),)
+                )
+            )
+        ).get_attribute("value")
+        print(benef)
+        actions.send_keys(Keys.PAGE_DOWN)
+        actions.perform()
+        listar_contratos = wdw(nav, 5).until(
+            ec.element_to_be_clickable((By.XPATH('//*[@id="btnLstCtt_txt"]'),))
+        )
+        listar_contratos.click()
 
 
 def main():
@@ -119,14 +217,12 @@ def main():
                 service=Service(ChromeDriverManager().install()), options=options
             )
             start(nav)
-            new_values = []
-            count = len(valores)
-            absoluteCount = len(valores)
-            secondsToFinish = round(count * 3.65)
-            print("Tempo para conclusão: ", timedelta(seconds=secondsToFinish))
-
             for linha in valores:
-                count -= 1
+                nome = linha[0].title().strip()
+                cpf = getNumbers(linha[2])
+                cpf = "".join(cpf)
+                process(nav, cpf)
+                print(nome, cpf)
             else:
                 # result = (
                 #     sheet.values()
@@ -138,14 +234,9 @@ def main():
                 #     )
                 #     .execute()
                 # )
-                failPerc = (len(invalidNumbers) / absoluteCount) * 100
-                success = absoluteCount - len(invalidNumbers)
-                fails = len(invalidNumbers)
-                print(
-                    f"{fails} Numeros inválidos! | {success} Numeros corretos | {failPerc:.2f}% de falha"
-                )
-        except:
-            print("Houve um erro...")
+                a = 1
+        except Exception as error:
+            print(error)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,9 @@
 import os.path
+import re
 from datetime import timedelta
 from time import sleep
 
+import clipboard
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -9,80 +11,122 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
+
+def getNumbers(str):
+    array = re.findall(r"[0-9]+", str)
+    return array
+
+
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-SAMPLE_SPREADSHEET_ID = "1x3dWpvyQ2A2Cpf2QLcSj_yU1dgxCzEvbToh4R0WpFK0"
-SAMPLE_RANGE_NAME = "contacts!B2:B57"
+SAMPLE_SPREADSHEET_ID = "1u5MlHBMgNRyF7HXFC4tHmuh90KrByK1y1hMlRk3jYWA"
+SAMPLE_RANGE_NAME = "cetelem_new!A2:C17"
 invalidNumbers = []
 
 
 def start(nav):
-    nav.get("https://autorizador.cetelem.com.br/Login")
+    nav.get("https://vendamaisbevi.com.br/acesso/login")
+    sleep(0.3)
+
+    entrar = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                "/html/body/div[1]/div[3]/div[1]/div[2]/div/div[2]/form/div/div[3]/button",
+            )
+        )
+    )
+    entrar.click()
     sleep(1)
-
-    token_validate = wdw(nav, 10).until(
+    nb_ou_cpf = wdw(nav, 10).until(
         ec.element_to_be_clickable(
-            (By.XPATH, "/html/body/div[1]/div[1]/form/div[3]/table[2]/tbody/tr/td[8]/a")
+            (
+                By.XPATH,
+                "/html/body/div[1]/div[8]/div/div/div[2]/div/div[2]/div/div[1]/div/a[2]",
+            )
         )
     )
-    token_validate.click()
-    enter_button = wdw(nav, 10).until(
-        ec.element_to_be_clickable(
-            (By.XPATH, "/html/body/form/div[3]/table[2]/tbody/tr/td[16]/a")
-        )
-    )
-    enter_button.click()
+    nb_ou_cpf.click()
     sleep(1.5)
-    Alert(nav).accept()
 
-    cadastro_button = wdw(nav, 10).until(
+
+def process(nav, cpf):
+    clipboard.copy(cpf)
+    cpf_input = wdw(nav, 10).until(
         ec.element_to_be_clickable(
-            (By.XPATH, '//*[@id="navbar-collapse-funcao"]/ul/li[1]/a')
+            (
+                By.XPATH,
+                "/html/body/div[1]/div[8]/div/div/div[2]/div[2]/div/div/div/form/div[2]/p[3]/input",
+            )
         )
     )
-    cadastro_button.click()
+    cpf_input.clear()
+    cpf_input.send_keys(Keys.CONTROL, "v")
     sleep(0.3)
-    cadastro_button.click()
-    refin_cp_button = wdw(nav, 10).until(
-        ec.element_to_be_clickable(
-            (By.XPATH, "/html/body/div[3]/nav/div/ul/li[1]/ul/li[2]/a")
-        )
-    )
-    refin_cp_button.click()
-    products_button = wdw(nav, 10).until(
+    consultar = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
                 By.XPATH,
-                "/html/body/form/div[3]/table/tbody/tr/td/div[1]/table/tbody/tr[2]/td/div/table/tbody/tr[3]/td/table/tbody/tr/td[2]/select",
+                "/html/body/div[1]/div[8]/div/div/div[2]/div[2]/div/div/div/form/div[2]/p[4]/button",
             )
         )
     )
-    products_button.click()
-    object_refin = wdw(nav, 10).until(
-        ec.element_to_be_clickable(
-            (
-                By.XPATH,
-                "/html/body/form/div[3]/table/tbody/tr/td/div[1]/table/tbody/tr[2]/td/div/table/tbody/tr[3]/td/table/tbody/tr/td[2]/select/option[4]",
-            )
-        )
-    )
-    object_refin.click()
+    consultar.click()
     sleep(0.3)
-    continuar = wdw(nav, 10).until(
+    selectnb = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
                 By.XPATH,
-                "/html/body/form/div[3]/table/tbody/tr/td/div[1]/table/tbody/tr[2]/td/div/table/tbody/tr[5]/td/table/tbody/tr/td[1]/span/div[1]/div[2]/div[2]/table/tbody/tr/td/a",
+                "/html/body/div[6]/div/select",
             )
         )
     )
-    continuar.click()
-    sleep(10)
+    selectnb.click()
+    selectNB_option = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                "/html/body/div[6]/div/select/option[2]",
+            )
+        )
+    )
+    selectNB_option.click()
+    ok = wdw(nav, 10).until(
+        ec.element_to_be_clickable(
+            (
+                By.XPATH,
+                "/html/body/div[6]/div/div[6]/button[1]",
+            )
+        )
+    )
+    ok.click()
+    sleep(1)
+    idade = nav.find_element(
+        By.XPATH,
+        '//*[@id="section_C1beb8f7d20"]/article/div/div/div[1]/div/div[2]/div/span',
+    ).get_attribute("innerText")
+    sleep(0.1)
+    margemlivre = nav.find_element(
+        By.XPATH,
+        '//*[@id="section_C1beb8f7d20"]/article/div/div/div[1]/div/div[3]/div/span',
+    ).get_attribute("innerText")
+    sleep(0.1)
+    salario = nav.find_element(
+        By.XPATH,
+        '//*[@id="section_C1beb8f7d20"]/article/div/div/div[1]/div/div[4]/div/span',
+    ).get_attribute("innerText")
+    sleep(0.1)
+    especie = nav.find_element(
+        By.XPATH,
+        '//*[@id="section_C1beb8f7d20"]/article/div/div/div[1]/div/div[7]/div/span',
+    ).get_attribute("innerText")
+    sleep(0.1)
+    return idade, margemlivre, salario, especie
 
 
 def main():
@@ -120,13 +164,14 @@ def main():
             )
             start(nav)
             new_values = []
-            count = len(valores)
-            absoluteCount = len(valores)
-            secondsToFinish = round(count * 3.65)
-            print("Tempo para conclusão: ", timedelta(seconds=secondsToFinish))
 
             for linha in valores:
-                count -= 1
+                nome = linha[0].title().strip()
+                cpf = getNumbers(linha[2])
+                cpf = "".join(cpf)
+                idade, margemlivre, salario, especie = process(nav, cpf)
+                print(nome, cpf, margemlivre, salario, especie, idade)
+
             else:
                 # result = (
                 #     sheet.values()
@@ -138,12 +183,7 @@ def main():
                 #     )
                 #     .execute()
                 # )
-                failPerc = (len(invalidNumbers) / absoluteCount) * 100
-                success = absoluteCount - len(invalidNumbers)
-                fails = len(invalidNumbers)
-                print(
-                    f"{fails} Numeros inválidos! | {success} Numeros corretos | {failPerc:.2f}% de falha"
-                )
+                a = 1
         except:
             print("Houve um erro...")
 

@@ -1,5 +1,6 @@
 import os.path
 import urllib
+from random import randint
 from time import sleep
 
 import clipboard
@@ -16,11 +17,11 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
-from mensagens_disparo import mensagem_cartão_benefício,margem_nova, representante, fgts, generico1
+from mensagens_disparo import generico1, generico2, generico3
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "12DmI7PcKBafB6H6E7skX4RIVFYbHPSidueocDXN4vUs"
-SAMPLE_RANGE_NAME = "BASE!A67:D100"
+SAMPLE_RANGE_NAME = "BASE!A1794:D1895"
 successSend = []
 failSend = []
 
@@ -31,10 +32,11 @@ def start(nav):
         sleep(1)
     sleep(1)
 
+
 def continueProcess(nav, telefone, texto):
     while len(nav.find_elements(By.ID, "side")) < 1:
         sleep(1)
-    sleep(1)
+    sleep(randint(1, 3))
 
     start_new_conversation_button = wdw(nav, 10).until(
         ec.element_to_be_clickable(
@@ -52,7 +54,7 @@ def continueProcess(nav, telefone, texto):
         ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[2]/a[2]"))
     )
     open_chat_button.click()
-    sleep(1.5)
+    sleep(randint(1, 5))
 
     while not (
         len(
@@ -74,7 +76,7 @@ def continueProcess(nav, telefone, texto):
         failSend.append(f"Erro: {telefone}")
         close_invalid_number_modal.click()
         return
-    sleep(1.5)
+    sleep(randint(1, 3))
     conversation_text_box = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
@@ -88,7 +90,7 @@ def continueProcess(nav, telefone, texto):
     conversation_text_box.click()
     conversation_text_box.clear()
     conversation_text_box.send_keys(Keys.CONTROL, "v")
-    sleep(0.5)
+    sleep(randint(1, 5))
     send_message_button = wdw(nav, 10).until(
         ec.element_to_be_clickable(
             (
@@ -99,7 +101,8 @@ def continueProcess(nav, telefone, texto):
     )
     send_message_button.click()
     successSend.append(f"Ok: {telefone}")
-    sleep(0.5)
+    sleep(randint(5, 10))
+
 
 def main():
     creds = None
@@ -141,14 +144,21 @@ def main():
 
         for linha in valores:
             if linha[3] == "*":
+                sleep(randint(1, 2))
                 nome = linha[0].title().strip().split(" ")
                 nome = nome[0]
                 telefone = linha[1].replace(" ", "").strip()
                 atendente = "Roberta"
-                texto = generico1.strip()
+                randomMessage = randint(1, 3)
+                if randomMessage == 1:
+                    texto = generico1.strip()
+                elif randomMessage == 2:
+                    texto = generico2.strip()
+                elif randomMessage == 3:
+                    texto = generico3.strip()
                 texto = texto.replace("CLIENTE", nome)
                 texto = texto.replace("ATENDENTE", atendente)
-                print(nome, telefone)
+                print(texto)
                 continueProcess(nav, telefone, texto)
             else:
                 print(linha)
