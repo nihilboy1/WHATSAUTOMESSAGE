@@ -1,56 +1,65 @@
-import os.path
-import urllib
+import os
 from random import randint
+import re
 from time import sleep
+from typing import List
 
-import clipboard
+from selenium.webdriver.support.wait import WebDriverWait as wdw
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.keys import Keys
 from google.auth.transport.requests import Request
+from selenium.webdriver.remote.webdriver import WebDriver
+
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.ui import WebDriverWait as wdw
-from webdriver_manager.chrome import ChromeDriverManager
 
-from mensagens_disparo import generico1, generico2, generico3
-
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-SAMPLE_SPREADSHEET_ID = "1haVj-tHFwIIEcASGykar6EuOI6tu1OiRvrHynU-afWM"
-SAMPLE_RANGE_NAME = "Plan1!A128:D166"
-successSend = []
-failSend = []
+import clipboard
 
 
-def start(nav):
-    nav.get("https://web.whatsapp.com/")
-    while len(nav.find_elements(By.XPATH, '//*[@id="side"]')) < 1:
+def getNumbers(string: str) -> str:
+    numeros = re.findall(r"\d+", string)
+    return "".join(numeros)
+
+
+def format_cpf(cpf: str) -> str:
+    cpf = cpf.zfill(11)
+    return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+
+
+def startProcess(webDriver: WebDriver) -> None:
+    webDriver.get("https://web.whatsapp.com/")
+    while len(webDriver.find_elements(By.XPATH, '//*[@id="side"]')) < 1:
         sleep(1)
     sleep(1)
 
 
-def continueProcess(nav, telefone, texto):
-    while len(nav.find_elements(By.ID, "side")) < 1:
+def continueProcess(
+    webDriver: WebDriver,
+    phoneNumber: str,
+    copy: str,
+    successSend: List[str],
+    failSend: List[str],
+):
+    while len(webDriver.find_elements(By.ID, "side")) < 1:
         sleep(1)
     sleep(randint(1, 3))
 
-    start_new_conversation_button = wdw(nav, 10).until(
+    start_new_conversation_button = wdw(webDriver, 10).until(
         ec.element_to_be_clickable(
             (By.XPATH, '//*[@id="startNonContactChat"]/div/span')
         )
     )
     start_new_conversation_button.click()
 
-    input_number_area = wdw(nav, 10).until(
+    input_number_area = wdw(webDriver, 10).until(
         ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[1]/div/input"))
     )
     input_number_area.clear()
-    input_number_area.send_keys(telefone)
-    open_chat_button = wdw(nav, 10).until(
+    input_number_area.send_keys(phoneNumber)
+    open_chat_button = wdw(webDriver, 10).until(
         ec.element_to_be_clickable((By.XPATH, "/html/body/div[6]/div[2]/a[2]"))
     )
     open_chat_button.click()
@@ -58,14 +67,14 @@ def continueProcess(nav, telefone, texto):
 
     while not (
         len(
-            nav.find_elements(
+            webDriver.find_elements(
                 By.XPATH,
                 "/html/body/div[1]/div/span[2]/div/span/div/div/div/div/div/div[2]/div/div",
             )
         )
         < 1
     ):
-        close_invalid_number_modal = wdw(nav, 10).until(
+        close_invalid_number_modal = wdw(webDriver, 10).until(
             ec.presence_of_element_located(
                 (
                     By.XPATH,
@@ -73,11 +82,11 @@ def continueProcess(nav, telefone, texto):
                 )
             )
         )
-        failSend.append(f"Erro: {telefone}")
+        failSend.append(f"Erro: {phoneNumber}")
         close_invalid_number_modal.click()
         return
     sleep(randint(1, 3))
-    conversation_text_box = wdw(nav, 10).until(
+    conversation_text_box = wdw(webDriver, 10).until(
         ec.element_to_be_clickable(
             (
                 By.XPATH,
@@ -85,13 +94,13 @@ def continueProcess(nav, telefone, texto):
             )
         )
     )
-    clipboard.copy(texto)
+    clipboard.copy(copy)
     conversation_text_box.clear()
     conversation_text_box.click()
     conversation_text_box.clear()
     conversation_text_box.send_keys(Keys.CONTROL, "v")
     sleep(randint(1, 5))
-    send_message_button = wdw(nav, 10).until(
+    send_message_button = wdw(webDriver, 10).until(
         ec.element_to_be_clickable(
             (
                 By.XPATH,
@@ -100,13 +109,12 @@ def continueProcess(nav, telefone, texto):
         )
     )
     send_message_button.click()
-    successSend.append(f"Ok: {telefone}")
+    successSend.append(f"Ok: {phoneNumber}")
     sleep(randint(5, 10))
 
 
-def main():
+def googleAPICredentialsCheck(SCOPES, SAMPLE_SPREADSHEET_ID, SAMPLE_RANGE_NAME):
     creds = None
-
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
     if not creds or not creds.valid:
@@ -117,7 +125,6 @@ def main():
             creds = flow.run_local_server(port=0)
         with open("token.json", "w") as token:
             token.write(creds.to_json())
-
     try:
         service = build("sheets", "v4", credentials=creds)
 
@@ -131,42 +138,4 @@ def main():
     except HttpError as err:
         print(err)
     finally:
-
-        options = webdriver.ChromeOptions()
-        options.add_argument(
-            r"--user-data-dir=C:/Users/samue/AppData/Local/Google/Chrome/User Data"
-        )
-        options.add_argument(r"--profile-directory=Profile 1")
-        nav = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=options
-        )
-        start(nav)
-
-        for linha in valores:
-            if linha[3] == "*":
-                sleep(randint(1, 2))
-                nome = linha[0].title().strip().split(" ")
-                nome = nome[0]
-                telefone = linha[1].replace(" ", "").strip()
-                atendente = "Roberta"
-                randomMessage = randint(1, 3)
-                if randomMessage == 1:
-                    texto = generico1.strip()
-                elif randomMessage == 2:
-                    texto = generico2.strip()
-                elif randomMessage == 3:
-                    texto = generico3.strip()
-                texto = texto.replace("CLIENTE", nome)
-                texto = texto.replace("ATENDENTE", atendente)
-                print(nome, telefone)
-                continueProcess(nav, telefone, texto)
-            else:
-                print(linha)
-        else:
-            print(
-                f"{len(successSend)} mensagens foram enviadas com sucesso, havendo falha em {len(failSend)} "
-            )
-
-
-if __name__ == "__main__":
-    main()
+        return

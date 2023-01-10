@@ -11,12 +11,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.ui import WebDriverWait as wdw
+from selenium.webdriver.support.wait import WebDriverWait as wdw
 from webdriver_manager.chrome import ChromeDriverManager
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-SAMPLE_SPREADSHEET_ID = "1haVj-tHFwIIEcASGykar6EuOI6tu1OiRvrHynU-afWM"
-SAMPLE_RANGE_NAME = "Plan1!B751:B861"
+SAMPLE_SPREADSHEET_ID = "1RVd4L-HCmVb9jYxk7KRj_gbkJIrz2dH9vumMBxCKkrI"
+SAMPLE_RANGE_NAME = "Planilha1!B2553:B3264"
 invalidNumbers = []
 
 

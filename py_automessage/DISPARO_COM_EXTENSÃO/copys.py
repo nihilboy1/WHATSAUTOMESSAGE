@@ -1,16 +1,16 @@
-generico1 = """Olá, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista da *Confiance*.
+generico1 = """Olá, *CLIENTE*, tudo bem? Meu nome é *Roberta*, eu sou análista da *Confiance*.
 
-Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
+Que tal consultar sua margem para empréstimo e cartão e descobrir as propostas disponiveis para você no momento?
 
-Envie *1* pra a gente realizar a sua simulação sem compromisso 😃.
+Envie *1* pra a gente realizar a sua simulação 😃.
 Envie *2* caso não tenha interesse no momento 😶
 
 Estou a disposição para tirar qualquer dúvida 😉."""
 
 
-generico2 = """Olá, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou análista de crédito da *Confiance*.
+generico2 = """Oi, *CLIENTE*, tudo bem? Meu nome é *Roberta*, eu sou análista de crédito da *Confiance*.
 
-Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
+Que tal consultar sua margem para empréstimo e cartão e descobrir as propostas disponiveis para você no momento?
 
 Envie *1* para realizarmos sua simulação rapidinho 😃.
 Envie *2* caso não tenha interesse no momento 😶
@@ -18,14 +18,30 @@ Envie *2* caso não tenha interesse no momento 😶
 Qualquer dúvida, estou a disposição 😉."""
 
 
-generico3 = """Olá, *CLIENTE*, tudo bem? Meu nome é *ATENDENTE*, eu sou correspondente bancário da *Confiance*.
+generico3 = """Olá, *CLIENTE*, tudo bem? Meu nome é *Roberta*, eu sou correspondente bancário da *Confiance*.
 
-Vamos consultar sua margem para empréstimo e cartão para descobrir as propostas disponiveis para você no momento?
+Que tal consultar sua margem para empréstimo e cartão e descobrir as propostas disponiveis para você no momento?
 
 Envie *1* pra a gente realizar a sua simulação sem compromisso 😃.
 Envie *2* caso não tenha interesse no momento 😶
 
 Se tiver qualquer dúvida, pode falar comigo 😉."""
+
+
+
+
+
+
+
+
+
+
+
+aumento = """Boa tarde, *CLIENTE*, tudo bem? Sabia que uma nova margem vai ficar disponivel para você após o aumento salarial desse ano? O valor liberado com essa nova contratação para o seu *benefício de numero NUM_BENEF* será de aproximadamente *VALOR_LIBERADO*, com desconto de apenas DESCONTO, no prazo padrão de 84x e taxa de 2,14
+
+Gostaria de realizar a *pré-digitação* da sua margem de aumento agora e já *GARANTIR o valor em conta no final do mês*?
+
+Envie *Sim*, para darmos andamento na proposta. 😁"""
 
 
 """
@@ -45,7 +61,7 @@ Esse produto tem diversas vantagens sobre os demais cartões e, além disso, o v
 Vamos realizar a simulação? :)
 """
 
-mensagem_cartão_benefício = """Olá, *CLIENTE*, meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+mensagem_cartão_benefício = """Olá, *CLIENTE*, meu nome é *Roberta*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
 
 Sabia que você tem *+5%* de margem para um *NOVO CARTÃO* para usar nessa *BLACK FRIDAY*?
 
@@ -61,7 +77,7 @@ Envie *2* caso não tenha interesse no momento
 """
 
 
-mensagem_saque_complementar = """Boa tarde, FULANO! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+mensagem_saque_complementar = """Boa tarde, FULANO! Meu nome é *Roberta*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
 
 Sabia que o banco *OLÉ* tem uma proposta de saque complementar no valor de *VALOR_PROPOSTA* *pré-aprovada* para você?
 
@@ -74,7 +90,7 @@ Envie *2* caso não tenha interesse no momento
 
 *Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
 
-margem_nova = """Boa tarde, *CLIENTE*! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+margem_nova = """Boa tarde, *CLIENTE*! Meu nome é *Roberta*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
 
 Sabia que a gente tem uma proposta de empréstimo *pré-aprovada* para você?
 
@@ -89,7 +105,7 @@ Envie *2* caso não tenha interesse no momento
 *Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
 
 
-representante = """Boa tarde, *CLIENTE*! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+representante = """Boa tarde, *CLIENTE*! Meu nome é *Roberta*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
 
 Sabia que a gente tem uma proposta de empréstimo *pré-aprovada* para você?
 
@@ -106,16 +122,16 @@ Envie *2* caso não tenha interesse no momento
 *Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""
 
 
-fgts = """Boa tarde, *CLIENTE*! Meu nome é *ATENDENTE*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*, tudo bem contigo?
+fgts = """Olá! Tudo bem contigo? Meu nome é *Roberta*, Seja bem-vindo(a) a Central de Atendimento da *CONFIANCE*! 
 
-Sua antecipação de *saque aniversário FGTS* já está *pré-aprovada* com a gente!
+Gostaria de realizar sua simulação de *Saque aniversário FGTS* rapidinho e sem sair de casa?
 
-✅ *Sem desconto mensal*
-✅ *Na sua conta em menos de 30 minutos*
+✅ *Dinheiro na conta em menos de 30 minutos*
 ✅ *Antecipação de até 10 Anos!*
 ✅ *Antecipe mesmo estando negativado!*
+✅ *Sem desconto mensal*
 
-Envie *1* para receber a simulação! :)
-Envie *2* caso não tenha interesse no momento
+Envie *1* para realizarmos a simulação 😃.
+Envie *2* caso não tenha interesse no momento 😶
 
 *Nosso CNPJ para a sua segurança: 48.248.145/0001-32*"""

@@ -22,7 +22,7 @@ create().then(client => {
         console.log(`processed ${++counter} items...\n`)
         const { name, phone } = JSON.parse(data)
         await client.sendText(phone, getMessage(name)).then(content => {
-          console.log('content', content)
+          console.log(name, phone)
         })
       }
     }

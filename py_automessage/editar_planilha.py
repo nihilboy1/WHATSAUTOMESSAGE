@@ -1,6 +1,5 @@
 import os.path
 import re
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -9,13 +8,13 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-SAMPLE_SPREADSHEET_ID = "1haVj-tHFwIIEcASGykar6EuOI6tu1OiRvrHynU-afWM"
-SAMPLE_RANGE_NAME = "Plan1!A2:C65"
+SAMPLE_SPREADSHEET_ID = "1lDTr455ktYVXiL4wPjQe2LdqduLrToanuYqFf0EBam8"
+SAMPLE_RANGE_NAME = "FGTS JEFFERSON!A2:C101"
 
- 
-def getNumbers(str):
-    array = re.findall(r"[0-9]+", str)
-    return array
+
+def getNumbers(string: str) -> str:
+    numeros = re.findall(r"\d+", string)
+    return "".join(numeros)
 
 
 def main():
@@ -47,15 +46,13 @@ def main():
         for linha in valores:
             nome = linha[0].title().strip()
             telefone = getNumbers(linha[1])
-            telefone = "".join(telefone)
-            telefone = f"55{telefone}"
             cpf = getNumbers(linha[2])
-            cpf = "".join(cpf)
+
             if len(cpf) < 11:
                 cpf = "0" + cpf
             cpf = f"{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
             new_values.append([nome, telefone, cpf])
-            print(nome, telefone)
+            print(nome, telefone, cpf)
 
         result = (
             sheet.values()

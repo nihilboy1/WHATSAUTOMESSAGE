@@ -14,7 +14,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as wdw
 from selenium.webdriver.support import expected_conditions as ec
 
-from mensagens_disparo import saque_complementar
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "1QvAcypOFnuagAVPV9IsVmBChw1fQiKaAyfavDChf5k0"
